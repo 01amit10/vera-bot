@@ -1,5 +1,6 @@
 """Quick validation script."""
-import json, urllib.request, urllib.error, time
+import json, urllib.request, urllib.error, time, sys, io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
 BASE = 'http://localhost:8080'
 

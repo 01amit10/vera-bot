@@ -17,12 +17,15 @@ import logging
 from datetime import datetime, timezone
 from typing import Any, Optional
 
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 from composer import VeraComposer, ReplyComposer, AUTO_REPLY_PATTERNS, HOSTILE_PATTERNS, INTENT_COMMIT_PATTERNS, OUT_OF_SCOPE_PATTERNS
+
+load_dotenv()
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -33,8 +36,8 @@ logger = logging.getLogger("vera")
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
-ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
-COMPOSER_MODEL = os.getenv("COMPOSER_MODEL", "claude-3-5-haiku-20241022")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+COMPOSER_MODEL = os.getenv("COMPOSER_MODEL", "gemini-2.0-flash")
 TEAM_NAME = os.getenv("TEAM_NAME", "Vera-Alpha")
 TEAM_MEMBERS = os.getenv("TEAM_MEMBERS", "Amit").split(",")
 CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "amit@example.com")
@@ -76,18 +79,18 @@ _reply_composer: Optional[ReplyComposer] = None
 def get_composer() -> VeraComposer:
     global _composer
     if _composer is None:
-        if not ANTHROPIC_API_KEY:
-            raise ValueError("ANTHROPIC_API_KEY not set")
-        _composer = VeraComposer(ANTHROPIC_API_KEY, COMPOSER_MODEL)
+        if not GEMINI_API_KEY:
+            raise ValueError("GEMINI_API_KEY not set")
+        _composer = VeraComposer(GEMINI_API_KEY, COMPOSER_MODEL)
     return _composer
 
 
 def get_reply_composer() -> ReplyComposer:
     global _reply_composer
     if _reply_composer is None:
-        if not ANTHROPIC_API_KEY:
-            raise ValueError("ANTHROPIC_API_KEY not set")
-        _reply_composer = ReplyComposer(ANTHROPIC_API_KEY, COMPOSER_MODEL)
+        if not GEMINI_API_KEY:
+            raise ValueError("GEMINI_API_KEY not set")
+        _reply_composer = ReplyComposer(GEMINI_API_KEY, COMPOSER_MODEL)
     return _reply_composer
 
 
