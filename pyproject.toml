@@ -1,0 +1,7 @@
+[tool.poetry]
+name = "vera-bot"
+version = "1.0.0"
+description = "Vera - magicpin AI Challenge bot"
+
+[tool.poetry.dependencies]
+python = "^3.11"
