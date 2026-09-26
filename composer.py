@@ -328,11 +328,10 @@ class VeraComposer:
         context_summary = _build_context_summary(category, merchant, trigger, customer)
         prompt = _build_compose_prompt(context_summary, customer_facing)
         
-        # Call Claude at temperature=0 for determinism
+        # Call Claude with low effort for fast, consistent output
         response = self.client.messages.create(
             model=self.model,
             max_tokens=800,
-            temperature=0,
             system=VERA_SYSTEM,
             messages=[{"role": "user", "content": prompt}]
         )
@@ -571,7 +570,6 @@ RESPOND WITH ONLY THIS JSON:
             response = self.client.messages.create(
                 model=self.model,
                 max_tokens=400,
-                temperature=0,
                 system=VERA_SYSTEM,
                 messages=[{"role": "user", "content": prompt}]
             )

@@ -244,13 +244,16 @@ async def tick(body: TickBody):
             logger.info(f"Suppressed trigger {trg_id} (key={sup_key})")
             continue
 
-        # Check expiry
+        # Check expiry using simulated time from tick request
         expires_at = trigger.get("expires_at")
         if expires_at:
             try:
                 exp_dt = datetime.fromisoformat(expires_at.replace("Z", "+00:00"))
-                if datetime.now(timezone.utc) > exp_dt:
-                    logger.info(f"Trigger {trg_id} expired")
+                # Use the tick's 'now' as simulated time (judge uses historical timestamps)
+                tick_now_str = body.now.replace("Z", "+00:00")
+                tick_now = datetime.fromisoformat(tick_now_str)
+                if tick_now > exp_dt:
+                    logger.info(f"Trigger {trg_id} expired (simulated time)")
                     continue
             except Exception:
                 pass
